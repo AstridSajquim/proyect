@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Tablas.DetalleVenta;
 import Tablas.Encargado;
 import Tablas.Venta;
 import java.sql.Connection;
@@ -25,6 +26,7 @@ public class RecursosHumanos extends javax.swing.JFrame {
 ConexionSQLbase c=new ConexionSQLbase();
 public List<Encargado> encargados;
 public List<Venta> ventas;
+public List<DetalleVenta> DetalleVenta;
 public Connection co;
 
     /**
@@ -33,7 +35,9 @@ public Connection co;
     public RecursosHumanos() {
         co=c.ConexionSQL();
         initComponents();
-        
+        DetalleVenta detalles= new DetalleVenta();
+        DetalleVenta=new ArrayList<>();
+        DetalleVenta=detalles.ObtenerTodas(co);
         //llenar la tabla de encargados
         Encargado enca=new Encargado();
         encargados=new ArrayList<>();
@@ -188,10 +192,17 @@ public Connection co;
          
         //ya tengo el vector ventas
         //ahora tengo que crear un arreglo de detalle de ventas en dónde el id sea igual al id de la venta yyyyy que sean bebidas
+        int a=0;
+        
+        double suma=0;
+        DetalleVenta detalle=new DetalleVenta();
         for (int i=0; i<ventas.size();i++){
-             System.out.println(ventas.get(i).getFecha());
+            //con cada venta, armar un detalle de venta, sumar los subtotales de cada detalle de venta
+            a=ventas.get(i).getId();
+            suma=suma+detalle.VentasDeBebidas(co, a);
+            
         }
-    
+    jLabel3.setText(String.valueOf(suma));
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

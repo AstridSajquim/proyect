@@ -28,7 +28,7 @@ public class DetalleVenta {
     boolean activo;
     String cliente;
 
-    public DetalleVenta(int Bebida_id,int Venta_id, int Comida_id, int cantidad, double subtotal, int Id, String cliente) {
+    public DetalleVenta(int Bebida_id, int Venta_id, int Comida_id, int cantidad, int Id, double subtotal, int aInt5, String cliente) {
         this.Bebida_id = Bebida_id;
         this.Venta_id=Venta_id;
         this.Comida_id = Comida_id;   
@@ -126,6 +126,35 @@ public class DetalleVenta {
     public List<DetalleVenta> ObtenerTodas(Connection conexion){
         List<DetalleVenta> detalle=new ArrayList<>();
         try {
+            PreparedStatement consulta=conexion.prepareStatement("Select Id, Bebida_Id, Ventas_Id, Comida_Id, Cant, subtotal, Activo, Cliente FROM Detalle_de_venta ORDER BY Id");
+            ResultSet resultado=consulta.executeQuery();
+            while(resultado.next()){
+                detalle.add(new DetalleVenta(resultado.getInt("Id"), resultado.getInt("Bebida_Id"), resultado.getInt("Ventas_Id"), resultado.getInt("Comida_Id"), resultado.getInt("Cant"), resultado.getDouble("Subtotal"), resultado.getInt("Activo"),resultado.getString("Cliente")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DetalleVenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return detalle;
+    }
+    public double VentasDeBebidas(Connection co, int id){
+        try {
+            double subtotal=0;
+            PreparedStatement consulta=co.prepareStatement("Select Subtotal from detalle_de_venta where id=? and comida_Id is null ");
+            consulta.setInt(1, id);
+            ResultSet resultado=consulta.executeQuery();
+            while(resultado.next()){
+                subtotal=subtotal+resultado.getDouble("Subtotal");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DetalleVenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return subtotal;
+    }
+    /*
+    public List<DetalleVenta> ObtenerTodas(Connection conexion){
+        List<DetalleVenta> detalle=new ArrayList<>();
+        try {
             PreparedStatement consulta=conexion.prepareStatement("Select Bebida_Id, Ventas_Id, Comida_Id, Cant, subtotal, Id, Activo FROM Detalle_de_venta ORDER BY Id");
             ResultSet resultado=consulta.executeQuery();
             while(resultado.next()){
@@ -135,8 +164,8 @@ public class DetalleVenta {
             Logger.getLogger(DetalleVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
         return detalle;
-        
     }
+    */
     public void Identificar(Connection co, int i, int id){
         PreparedStatement consulta;
         try {
