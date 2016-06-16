@@ -6,7 +6,6 @@
 package Tablas;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class Venta {
     int Id;
-    Date Fecha;
+    String Fecha;
     double Monto;
     int Encargado_id;
     int Cliente_Id;
@@ -31,7 +30,7 @@ public class Venta {
     public Venta() {
     }
 
-    public Venta(int Id, Date Fecha, double Monto, int Encargado_id, int Cliente_Id, boolean anulado, boolean credito) {
+    public Venta(int Id, String Fecha, double Monto, int Encargado_id, int Cliente_Id, boolean anulado, boolean credito) {
         this.Id = Id;
         this.Fecha = Fecha;
         this.Monto = Monto;
@@ -49,11 +48,11 @@ public class Venta {
         this.Id = Id;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return Fecha;
     }
 
-    public void setFecha(Date Fecha) {
+    public void setFecha(String Fecha) {
         this.Fecha = Fecha;
     }
 
@@ -138,7 +137,7 @@ public class Venta {
             PreparedStatement consulta =conexion.prepareStatement("Select Id, Fecha, Monto, Encargado, Cliente, Anulado, Credito FROM Ventas ORDER BY Id");
             ResultSet resultado=consulta.executeQuery();
             while(resultado.next()){
-                ven.add((new Venta(resultado.getInt("Id"),resultado.getDate("Fecha"), resultado.getDouble("Monto"), resultado.getInt("Encargado"),resultado.getInt("Cliente"),resultado.getBoolean("Anulado"), resultado.getBoolean("Credito"))));
+                ven.add((new Venta(resultado.getInt("Id"),resultado.getString("Fecha"), resultado.getDouble("Monto"), resultado.getInt("Encargado"),resultado.getInt("Cliente"),resultado.getBoolean("Anulado"), resultado.getBoolean("Credito"))));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
@@ -152,7 +151,7 @@ public class Venta {
             consulta.setInt(1, id);
             ResultSet resultado=consulta.executeQuery();
             vent.setId(resultado.getInt("Id"));
-            vent.setFecha(resultado.getDate("Fecha"));
+            vent.setFecha(resultado.getString("Fecha"));
             vent.setMonto(resultado.getDouble("Monto"));
             vent.setEncargado_id(resultado.getInt("Encargado"));
             vent.setCliente_Id(resultado.getInt("Cliente"));
@@ -164,16 +163,16 @@ public class Venta {
         
         return vent;
     }
-    
-    
-    
-    public List<Venta> ObtenerEnElRango(Connection conexion, Date fecha1, Date fecha2){
+    public List<Venta> ObtenerEnElRango(Connection conexion, String fecha1, String fecha2){
         List<Venta> ventas=new ArrayList<>();
         try {
             PreparedStatement consulta=conexion.prepareStatement("Select ID, Fecha, Monto, Encargado_ID, Cliente_ID, Anulado, Credito From Ventas where Fecha BETWEEN ? AND ? ORDER BY Fecha");
+            consulta.setString(1, fecha1);
+            consulta.setString(2, fecha2);
             ResultSet resultado=consulta.executeQuery();
             while(resultado.next()){
-                ventas.add(new Venta(resultado.getInt("ID"),resultado.getDate("Fecha"), resultado.getDouble("Monto"), resultado.getInt("Encargado_ID"),resultado.getInt("Cliente_ID"),resultado.getBoolean("Anulado"),resultado.getBoolean("Credito")));
+                ventas.add(new Venta(resultado.getInt("ID"),resultado.getString("Fecha"), resultado.getDouble("Monto"), resultado.getInt("Encargado_ID"),resultado.getInt("Cliente_ID"),resultado.getBoolean("Anulado"),resultado.getBoolean("Credito")));
+               
             }
         } catch (SQLException ex) {
             Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);

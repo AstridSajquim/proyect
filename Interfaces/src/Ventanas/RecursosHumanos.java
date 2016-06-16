@@ -175,32 +175,23 @@ public Connection co;
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-    try {
-        // TODO add your handling code here:
-        //hacer un arreglo de las ventas que esten en los rangos, luego, ir a los detalles a ver cuáles fueron esas ventas y sacar
-        //solo las que sean de bebidas(osea comidaid==null) sumarlas y dividirlas entre dos
-        /*
-        Encargado enca=new Encargado();
-        encargados=new ArrayList<>();
-        encargados=enca.obtenerTodas(co);
-        DefaultTableModel dt=(DefaultTableModel) jTable1.getModel();
-        dt.setRowCount(0);
-        for (int i=0;i<encargados.size();i++){
-        dt.addRow(new Object[]{
-        encargados.get(i).getNombre(),encargados.get(i).getCargo(),encargados.get(i).getPassword()
-        });
-        System.out.println(encargados.get(i).getNombre());
-        */
-        Date fecha1 =null;
-        Date fecha2 =null;
+   
+        String fecha1=jTextField1.getText();
+        String fecha2=jTextField2.getText();
         Venta venta=new Venta();
         ventas=new ArrayList<>();
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        fecha1=(Date) df.parse(jTextField1.getText());
-        fecha2=(Date) df.parse(jTextField2.getText());
-    } catch (ParseException ex) {
-        Logger.getLogger(RecursosHumanos.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        String[] ffecha1=fecha1.split("/");
+         String[] ffecha2=fecha2.split("/");
+        String fechis1=ffecha1[2]+"-"+ffecha1[1]+"-"+ffecha1[0];
+        String fechis2=ffecha2[2]+"-"+ffecha2[1]+"-"+ffecha2[0];
+        ventas=venta.ObtenerEnElRango(co, fechis1, fechis2);
+         
+        //ya tengo el vector ventas
+        //ahora tengo que crear un arreglo de detalle de ventas en dónde el id sea igual al id de la venta yyyyy que sean bebidas
+        for (int i=0; i<ventas.size();i++){
+             System.out.println(ventas.get(i).getFecha());
+        }
+    
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
