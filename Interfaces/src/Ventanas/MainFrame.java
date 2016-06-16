@@ -126,7 +126,9 @@ public Connection co;
         });
         getContentPane().add(jLabelBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
+        jTableFoodInventory.setBackground(new java.awt.Color(0, 0, 0));
         jTableFoodInventory.setFont(new java.awt.Font("Trebuchet MS", 0, 11)); // NOI18N
+        jTableFoodInventory.setForeground(new java.awt.Color(255, 255, 255));
         jTableFoodInventory.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
